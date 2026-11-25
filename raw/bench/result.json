@@ -1,0 +1,198 @@
+{
+  "schema": "evaluation-result/1",
+  "tool": "bench",
+  "started_at": "2026-11-25T08:27:00Z",
+  "finished_at": "2026-11-25T08:38:13Z",
+  "build": {
+    "commit": "78c92e4f21e38f9528f21e09c5e43936a04b6b0d",
+    "dirty_digest": null
+  },
+  "model": "qwen3.8-flash-next:gguf:q2",
+  "artifacts": {
+    "drafter": {
+      "method": "mtp",
+      "path": "/home/outsmartchad/.magnitude/models/hub/models--unsloth--Qwen3.8-Flash-Next-GGUF/snapshots/084c631ac221016019d6e0a863afe92d90edd3b0/MTP/mtp-Qwen3.8-Flash-Next-shared-Q8_0.gguf",
+      "sha256": "5ff54097406a905cf3a724c709124ceb0e3e10235ee862298969e91c96fa96e6"
+    },
+    "model": "qwen3.8-flash-next:gguf:q2",
+    "projector": {
+      "path": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/mmproj-Qwen3.8-Flash-Next-BF16.gguf",
+      "sha256": "b1a82259702816a5330d7bd7607cd9676b11780e79ff7348c21103ff3ce49bd0"
+    },
+    "target": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+    "target_files": [
+      "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+      "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00002-of-00002.gguf"
+    ],
+    "target_sha256": "69820c02ec7d0b45ef2ebb19d6620299db749fe2aded7f39f93c6b88b199b720"
+  },
+  "templates": [
+    {
+      "template": "repeat:64k",
+      "context": 65536,
+      "path": "templates/f67f31e10d8a2109.json",
+      "digest": "f67f31e10d8a2109e35f1546812b6b379c50cc4bae65797323f28da38a2417fb"
+    }
+  ],
+  "rendered_digest": "bb912cafb448c5acab9b317812a57804ca6d9ee363ec79dfe8b925cd884cb06d",
+  "host": {
+    "hostname": "spark-6154",
+    "alias": "local",
+    "os": "Linux",
+    "os_version": "7.0.0-1025-nvidia",
+    "architecture": "aarch64",
+    "model": "NVIDIA_DGX_Spark",
+    "chip": "Cortex-X925 + Cortex-A725",
+    "cpu_cores_physical": 20,
+    "cpu_cores_logical": 20,
+    "cpus_allowed": 20.0,
+    "memory_bytes": 130661072896,
+    "gpus": [
+      {
+        "name": "NVIDIA GB10",
+        "cores": null,
+        "memory_bytes": null
+      }
+    ],
+    "errors": []
+  },
+  "command": [
+    "magnitude-bench",
+    "job",
+    "--inference",
+    "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/src",
+    "--model",
+    "qwen3.8-flash-next:gguf:q2",
+    "--passes",
+    "2",
+    "--fresh-tuning",
+    "--magnitude-device",
+    "cuda",
+    "--magnitude-binary",
+    "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-engine",
+    "--magnitude-cache-dir",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/kernels",
+    "--harness",
+    "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-render",
+    "--template",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/inputs/f67f31e10d8a2109.json",
+    "--artifacts",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/artifacts.json",
+    "--output",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench",
+    "--build-identity",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench/build.json"
+  ],
+  "measurements": {
+    "serving": [
+      {
+        "engine": "magnitude",
+        "block": 0,
+        "section": "context",
+        "context": 65536,
+        "concurrency": 1,
+        "session": "context-t65536-c1-0",
+        "template": "repeat:64k",
+        "lane": 0,
+        "prompt_sha256": "48cc7da0ca008f88cf6c26bc191cf2cc78eedcfba75ef579d5f0451ca94c36ae",
+        "outcome": "valid",
+        "valid": true,
+        "ttft_ms": 87182.9849560163,
+        "completed_ms": 90305.67573598819,
+        "prompt_tokens": 64354,
+        "completion_tokens": 256,
+        "prefill_tps": 739.0012852488746,
+        "decode_tps": 81.9926342442292,
+        "draft_n": 252,
+        "draft_n_accepted": 219,
+        "retrieval": null,
+        "timing_basis": "native-model-service"
+      },
+      {
+        "engine": "magnitude",
+        "block": 1,
+        "section": "context",
+        "context": 65536,
+        "concurrency": 1,
+        "session": "context-t65536-c1-0",
+        "template": "repeat:64k",
+        "lane": 0,
+        "prompt_sha256": "48cc7da0ca008f88cf6c26bc191cf2cc78eedcfba75ef579d5f0451ca94c36ae",
+        "outcome": "valid",
+        "valid": true,
+        "ttft_ms": 86647.08606299246,
+        "completed_ms": 90654.95765203377,
+        "prompt_tokens": 64354,
+        "completion_tokens": 256,
+        "prefill_tps": 743.5640920414492,
+        "decode_tps": 63.879198702096254,
+        "draft_n": 250,
+        "draft_n_accepted": 206,
+        "retrieval": null,
+        "timing_basis": "native-model-service"
+      }
+    ],
+    "drafting": {
+      "proposed": 502,
+      "accepted": 425,
+      "acceptance": 0.8466135458167331,
+      "tokens_per_verify": null,
+      "requests": 2,
+      "rounds": [
+        {
+          "block": 0,
+          "requests": []
+        },
+        {
+          "block": 1,
+          "requests": []
+        }
+      ]
+    },
+    "tuning": {
+      "budget_seconds": 60.0,
+      "fresh": true,
+      "outcome": {
+        "loads": [
+          {
+            "work": "search",
+            "budget_seconds": 60.0,
+            "fresh": true,
+            "concluded_at_seconds": 135.812361298,
+            "overrun_seconds": 0.0,
+            "refused": 231,
+            "units": 299,
+            "searched": 299,
+            "stored": 0,
+            "tuning_seconds": 798.9995984650004,
+            "seconds": 137.793886853
+          },
+          {
+            "work": "load",
+            "budget_seconds": 60.0,
+            "fresh": true,
+            "units": 299,
+            "searched": 0,
+            "stored": 299,
+            "tuning_seconds": 1.0626078529999994,
+            "seconds": 15.21133795
+          },
+          {
+            "work": "load",
+            "budget_seconds": 60.0,
+            "fresh": false,
+            "units": 299,
+            "searched": 0,
+            "stored": 299,
+            "tuning_seconds": 0.9796812959999999,
+            "seconds": 12.664194479
+          }
+        ]
+      }
+    }
+  },
+  "traces": {
+    "tuning": "tuning.jsonl",
+    "thermal": "thermal.jsonl"
+  }
+}

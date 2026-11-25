@@ -1,0 +1,181 @@
+{
+  "format": 1,
+  "id": "bench",
+  "status": "completed",
+  "command": "magnitude-bench job --inference /home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/src --model qwen3.8-flash-next:gguf:q2 --passes 2 --fresh-tuning --magnitude-device cuda --magnitude-binary /home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-engine --magnitude-cache-dir /home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/kernels --harness /home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-render --template /home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/inputs/f67f31e10d8a2109.json --artifacts /home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/artifacts.json --output /home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench --build-identity /home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench/build.json",
+  "planned": 2,
+  "completed": 2,
+  "outcomes": {
+    "valid": 2
+  },
+  "rows": [
+    {
+      "target": "magnitude",
+      "section": "context",
+      "template": "repeat:64k",
+      "context_target": 65536,
+      "concurrency": 1,
+      "observations": 2,
+      "eligible": 2,
+      "outcomes": {
+        "valid": 2
+      },
+      "actual_prompt_tokens": [
+        64354
+      ],
+      "actual_completion_tokens": [
+        256
+      ],
+      "ttft_ms": 86915.03550950438,
+      "completion_ms": 90480.31669401098,
+      "ttft_p95_ms": 87182.9849560163,
+      "completion_p95_ms": 90654.95765203377,
+      "prefill_tokens_per_second": 741.2826886451619,
+      "decode_tokens_per_second": 72.93591647316272,
+      "draft_proposed": 502,
+      "draft_accepted": 425,
+      "timing_basis": "native-model-service"
+    }
+  ],
+  "error": null,
+  "comparison": "product comparison of each engine's serving of one catalog model",
+  "cache_policy": "disabled; shared session history does not imply retained prefix reuse",
+  "process_footprints": [
+    {
+      "baseline_rss_bytes": 41397563392,
+      "block": 0,
+      "peak_rss_bytes": 53957296128,
+      "target": "magnitude"
+    },
+    {
+      "baseline_rss_bytes": 41170087936,
+      "block": 1,
+      "peak_rss_bytes": 53771223040,
+      "target": "magnitude"
+    }
+  ],
+  "expert_banks": [
+    {
+      "target": "magnitude",
+      "label": "block-0",
+      "first_slots": 512,
+      "last_slots": 512,
+      "min_slots": 512,
+      "max_slots": 512,
+      "floor": 14,
+      "ceiling": 512,
+      "resizes": {},
+      "latest_resize": null
+    },
+    {
+      "target": "magnitude",
+      "label": "block-1",
+      "first_slots": 512,
+      "last_slots": 512,
+      "min_slots": 512,
+      "max_slots": 512,
+      "floor": 14,
+      "ceiling": 512,
+      "resizes": {},
+      "latest_resize": null
+    }
+  ],
+  "tuning_health": {
+    "work": "search",
+    "budget_seconds": 60.0,
+    "total_units": 299,
+    "qualified": 7,
+    "canonical_fallbacks": 292,
+    "fallback_rate": 0.9765886287625418,
+    "high_fallback": true,
+    "expired": 46,
+    "unqualified_budget": 45,
+    "refused": 231,
+    "total_default_gaps": 1,
+    "worst_default_gaps": [
+      {
+        "unit": "stream_mix_up [UW=bf16,NW=bf16,A=bf16,M=65..]",
+        "entry": "stream_mix_up",
+        "bindings": "UW=bf16,NW=bf16,A=bf16,M=65..",
+        "default_us": 572.9177642522798,
+        "best_us": 341.69859426060646,
+        "ratio": 1.6766758010579559,
+        "qualification": "qualified",
+        "stop": "Exhausted"
+      }
+    ],
+    "slowest_fallbacks": [
+      {
+        "unit": "stream_mix_down [NW=bf16,DW=bf16,IW=bf16,A=bf16,C=1,M=65..]",
+        "entry": "stream_mix_down",
+        "bindings": "NW=bf16,DW=bf16,IW=bf16,A=bf16,C=1,M=65..",
+        "reason": "Expired",
+        "median_us": 555.741755761803,
+        "weight": 198.46713344988805,
+        "weighted_ms": 110.29647320445284
+      },
+      {
+        "unit": "gated_delta_chunk [RN=bf16,A=bf16]",
+        "entry": "gated_delta_chunk",
+        "bindings": "RN=bf16,A=bf16",
+        "reason": "Canonical",
+        "median_us": 93.89648643933882,
+        "weight": 844.3454408342659,
+        "weighted_ms": 79.2810702354122
+      },
+      {
+        "unit": "routed_gate_up [EGW=q2g64@mma16,EUW=q2g64@mma16,A=bf16,M=4..17]",
+        "entry": "routed_gate_up",
+        "bindings": "EGW=q2g64@mma16,EUW=q2g64@mma16,A=bf16,M=4..17",
+        "reason": "Canonical",
+        "median_us": 160.23837311390417,
+        "weight": 434.1006556142716,
+        "weighted_ms": 69.55958282331008
+      },
+      {
+        "unit": "routed_gate_up_part [EGW=q2g64@mma16,EUW=q2g64@mma16,A=bf16,M=4..17]",
+        "entry": "routed_gate_up_part",
+        "bindings": "EGW=q2g64@mma16,EUW=q2g64@mma16,A=bf16,M=4..17",
+        "reason": "Expired",
+        "median_us": 156.77426627830627,
+        "weight": 434.1006556142716,
+        "weighted_ms": 68.05581177485914
+      },
+      {
+        "unit": "stream_mix_up [UW=bf16,NW=bf16,A=bf16,M=1..9]",
+        "entry": "stream_mix_up",
+        "bindings": "UW=bf16,NW=bf16,A=bf16,M=1..9",
+        "reason": "Canonical",
+        "median_us": 35.35752750307639,
+        "weight": 1891.2933144678836,
+        "weighted_ms": 66.8714553826827
+      }
+    ]
+  },
+  "templates": [
+    "repeat:64k"
+  ],
+  "key": "repeat",
+  "path": "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench",
+  "host": {
+    "hostname": "spark-6154",
+    "alias": "local",
+    "os": "Linux",
+    "os_version": "7.0.0-1025-nvidia",
+    "architecture": "aarch64",
+    "model": "NVIDIA_DGX_Spark",
+    "chip": "Cortex-X925 + Cortex-A725",
+    "cpu_cores_physical": 20,
+    "cpu_cores_logical": 20,
+    "cpus_allowed": 20.0,
+    "memory_bytes": 130661072896,
+    "gpus": [
+      {
+        "name": "NVIDIA GB10",
+        "cores": null,
+        "memory_bytes": null
+      }
+    ],
+    "errors": []
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "templates": [
+    "repeat:64k"
+  ],
+  "targets": [
+    {
+      "engine": "magnitude",
+      "reference": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+      "sha256": "69820c02ec7d0b45ef2ebb19d6620299db749fe2aded7f39f93c6b88b199b720"
+    }
+  ],
+  "sections": [
+    "context"
+  ],
+  "engine_options": {
+    "inference": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/src",
+    "drafting": true,
+    "vision": false,
+    "magnitude": {
+      "binary": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-engine",
+      "build": null,
+      "harness": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-render",
+      "device": "cuda",
+      "cache_dir": "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/kernels",
+      "prefill_tokens": null,
+      "mtp_proposals": null,
+      "draft_budget": null,
+      "method": null,
+      "alpha": null,
+      "tuning_seconds": null,
+      "fresh_tuning": true,
+      "tuning_trace": true
+    },
+    "llama": {
+      "binary": null,
+      "draft_proposals": 3,
+      "gpu_layers": 99,
+      "cache_type_k": "f16",
+      "cache_type_v": "f16",
+      "context_headroom": 0
+    },
+    "ollama": {
+      "binary": null,
+      "models": null,
+      "kv_cache_type": null,
+      "flash_attention": "auto",
+      "speculation": "off",
+      "context_headroom": 0,
+      "answer_prefill": false
+    },
+    "watchdog": {
+      "stall_seconds": null,
+      "request_seconds": null
+    },
+    "schedule": {
+      "passes": 2
+    }
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "schema_version": 2,
+  "scope": "whole_run",
+  "status": "partial",
+  "source": "Linux: /sys/class/thermal, hwmon, nvidia-smi, /proc/stat, /proc/meminfo",
+  "sensor_grouping": "Names containing cpu/coretemp/k10temp/zenpower/x86_pkg/soc/package are CPU; gpu/amdgpu/nouveau/radeon and nvidia-smi are GPU; everything else is other. hwmon chips duplicating a thermal zone type are skipped.",
+  "interval_seconds": 1.0,
+  "duration_seconds": 674.5389540029573,
+  "sample_count": 676,
+  "mean_method": "trapezoidal time weighting; gaps excluded",
+  "trace": "thermal.jsonl",
+  "trace_sha256": "916b33a0780ba26e9d6479a1bb7219f601849fb79cf95ef0e48b34e4c1a6f705",
+  "channels": {
+    "cpu_max": {
+      "start_c": null,
+      "end_c": null,
+      "mean_c": null,
+      "min_c": null,
+      "max_c": null,
+      "valid_samples": 0,
+      "covered_seconds": 0.0
+    },
+    "cpu_mean": {
+      "start_c": null,
+      "end_c": null,
+      "mean_c": null,
+      "min_c": null,
+      "max_c": null,
+      "valid_samples": 0,
+      "covered_seconds": 0.0
+    },
+    "gpu_max": {
+      "start_c": 42.0,
+      "end_c": 58.0,
+      "mean_c": 54.105451043647825,
+      "min_c": 40.0,
+      "max_c": 70.0,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "gpu_mean": {
+      "start_c": 42.0,
+      "end_c": 58.0,
+      "mean_c": 54.105451043647825,
+      "min_c": 40.0,
+      "max_c": 70.0,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon10:mt7925_phy0:temp1": {
+      "start_c": 40.0,
+      "end_c": 56.0,
+      "mean_c": 48.2731701995462,
+      "min_c": 38.0,
+      "max_c": 59.0,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon2:acpitz_0:temp1": {
+      "start_c": 46.1,
+      "end_c": 64.1,
+      "mean_c": 60.87237676907985,
+      "min_c": 42.8,
+      "max_c": 76.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon3:acpitz_1:temp1": {
+      "start_c": 41.4,
+      "end_c": 58.3,
+      "mean_c": 51.571087211501776,
+      "min_c": 40.0,
+      "max_c": 60.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon4:acpitz_2:temp1": {
+      "start_c": 41.6,
+      "end_c": 58.6,
+      "mean_c": 53.498920013031096,
+      "min_c": 41.0,
+      "max_c": 66.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon5:acpitz_3:temp1": {
+      "start_c": 41.5,
+      "end_c": 58.9,
+      "mean_c": 51.83885568163223,
+      "min_c": 39.8,
+      "max_c": 61.5,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon6:acpitz_4:temp1": {
+      "start_c": 41.6,
+      "end_c": 64.1,
+      "mean_c": 54.45104511607927,
+      "min_c": 38.8,
+      "max_c": 73.7,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon7:acpitz_5:temp1": {
+      "start_c": 46.1,
+      "end_c": 61.2,
+      "mean_c": 58.016392212508734,
+      "min_c": 42.8,
+      "max_c": 76.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon8:acpitz_6:temp1": {
+      "start_c": 43.5,
+      "end_c": 60.7,
+      "mean_c": 54.41674824021423,
+      "min_c": 40.8,
+      "max_c": 65.5,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon9:nvme:Composite": {
+      "start_c": 37.85,
+      "end_c": 47.85,
+      "mean_c": 42.45566459093311,
+      "min_c": 36.85,
+      "max_c": 47.85,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon9:nvme:Sensor 1": {
+      "start_c": 38.85,
+      "end_c": 49.85,
+      "mean_c": 44.07093441703434,
+      "min_c": 37.85,
+      "max_c": 51.85,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "hwmon:hwmon9:nvme:Sensor 2": {
+      "start_c": 37.85,
+      "end_c": 47.85,
+      "mean_c": 42.45566459093311,
+      "min_c": 36.85,
+      "max_c": 47.85,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "nvidia:0": {
+      "start_c": 42.0,
+      "end_c": 58.0,
+      "mean_c": 54.105451043647825,
+      "min_c": 40.0,
+      "max_c": 70.0,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "other_max": {
+      "start_c": 46.1,
+      "end_c": 64.1,
+      "mean_c": 60.891440171498495,
+      "min_c": 42.8,
+      "max_c": 76.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "other_mean": {
+      "start_c": 42.11944444444444,
+      "end_c": 58.51944444444444,
+      "mean_c": 52.58778917311237,
+      "min_c": 40.375,
+      "max_c": 62.30833333333333,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone0:acpitz": {
+      "start_c": 46.1,
+      "end_c": 64.1,
+      "mean_c": 60.87006529567445,
+      "min_c": 42.8,
+      "max_c": 76.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone1:acpitz": {
+      "start_c": 41.4,
+      "end_c": 58.3,
+      "mean_c": 51.57000642587222,
+      "min_c": 40.0,
+      "max_c": 60.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone2:acpitz": {
+      "start_c": 41.6,
+      "end_c": 58.6,
+      "mean_c": 53.49670617569738,
+      "min_c": 41.0,
+      "max_c": 66.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone3:acpitz": {
+      "start_c": 41.5,
+      "end_c": 58.9,
+      "mean_c": 51.84019807264826,
+      "min_c": 39.8,
+      "max_c": 61.5,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone4:acpitz": {
+      "start_c": 41.6,
+      "end_c": 64.1,
+      "mean_c": 54.449236061257956,
+      "min_c": 38.8,
+      "max_c": 73.7,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone5:acpitz": {
+      "start_c": 46.1,
+      "end_c": 61.2,
+      "mean_c": 58.01740959537515,
+      "min_c": 42.8,
+      "max_c": 76.8,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    },
+    "zone:thermal_zone6:acpitz": {
+      "start_c": 43.5,
+      "end_c": 60.7,
+      "mean_c": 54.415724447002816,
+      "min_c": 40.8,
+      "max_c": 65.5,
+      "valid_samples": 676,
+      "covered_seconds": 674.4894537230139
+    }
+  },
+  "errors": {
+    "memory:gpu0: memory not reported": 676
+  }
+}

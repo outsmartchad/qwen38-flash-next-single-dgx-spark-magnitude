@@ -1,0 +1,18 @@
+{
+  "reference": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+  "path": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+  "kind": "gguf",
+  "context_limit": 262144,
+  "metadata": {
+    "architecture": "qwen4exp",
+    "file_type": 41
+  },
+  "files": [
+    {
+      "path": "Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+      "size": 37623740192,
+      "sha256": "69820c02ec7d0b45ef2ebb19d6620299db749fe2aded7f39f93c6b88b199b720",
+      "mtime_ns": 1795576249315980972
+    }
+  ]
+}

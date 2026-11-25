@@ -1,0 +1,21 @@
+{
+  "hostname": "spark-6154",
+  "alias": "local",
+  "os": "Linux",
+  "os_version": "7.0.0-1025-nvidia",
+  "architecture": "aarch64",
+  "model": "NVIDIA_DGX_Spark",
+  "chip": "Cortex-X925 + Cortex-A725",
+  "cpu_cores_physical": 20,
+  "cpu_cores_logical": 20,
+  "cpus_allowed": 20.0,
+  "memory_bytes": 130661072896,
+  "gpus": [
+    {
+      "name": "NVIDIA GB10",
+      "cores": null,
+      "memory_bytes": null
+    }
+  ],
+  "errors": []
+}

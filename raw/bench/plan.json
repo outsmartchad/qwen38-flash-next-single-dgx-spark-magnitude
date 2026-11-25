@@ -1,0 +1,20 @@
+{
+  "digest": "eba01d843fe7f1b3686040e22631f3765dd6491f7e9defcd393d0067700ecbf8",
+  "sized_by": "magnitude-harness",
+  "rendering": {
+    "harness": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-render",
+    "harness_sha256": "044ca865805b03c38e204a847bc4c3f7a35a31f5be039437e3d7fd456ad2159d"
+  },
+  "parallel_sequences": 1,
+  "cache_policy": "disabled",
+  "context_capacity": 64768,
+  "planned_requests": 2,
+  "execution_order": [
+    [
+      "magnitude"
+    ],
+    [
+      "magnitude"
+    ]
+  ]
+}

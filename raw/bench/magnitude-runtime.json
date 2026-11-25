@@ -1,0 +1,23 @@
+{
+  "adapter": "magnitude",
+  "binary": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-engine",
+  "binary_sha256": "ad73dc9cfe5c76d1855187d9b7b57a4016f80e5f898a1f46ed2e83ab3c02bcdd",
+  "binary_bytes": 1176715920,
+  "kernel_cache": "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/kernels",
+  "drafting": "mtp",
+  "options": {
+    "binary": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-engine",
+    "build": null,
+    "harness": "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-render",
+    "device": "cuda",
+    "cache_dir": "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/kernels",
+    "prefill_tokens": null,
+    "mtp_proposals": null,
+    "draft_budget": null,
+    "method": null,
+    "alpha": null,
+    "tuning_seconds": null,
+    "fresh_tuning": true,
+    "tuning_trace": true
+  }
+}
