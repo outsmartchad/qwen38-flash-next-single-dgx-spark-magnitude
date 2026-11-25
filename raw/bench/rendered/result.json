@@ -1,0 +1,61 @@
+{
+  "schema": "evaluation-result/1",
+  "tool": "harness.render",
+  "started_at": "2026-11-25T08:27:07Z",
+  "finished_at": "2026-11-25T08:27:14Z",
+  "build": {
+    "commit": "78c92e4f21e38f9528f21e09c5e43936a04b6b0d",
+    "dirty_digest": null
+  },
+  "model": "qwen3.8-flash-next:gguf:q2",
+  "artifacts": {
+    "drafter": {
+      "method": "mtp",
+      "path": "/home/outsmartchad/.magnitude/models/hub/models--unsloth--Qwen3.8-Flash-Next-GGUF/snapshots/084c631ac221016019d6e0a863afe92d90edd3b0/MTP/mtp-Qwen3.8-Flash-Next-shared-Q8_0.gguf",
+      "sha256": "5ff54097406a905cf3a724c709124ceb0e3e10235ee862298969e91c96fa96e6"
+    },
+    "model": "qwen3.8-flash-next:gguf:q2",
+    "projector": {
+      "path": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/mmproj-Qwen3.8-Flash-Next-BF16.gguf",
+      "sha256": "b1a82259702816a5330d7bd7607cd9676b11780e79ff7348c21103ff3ce49bd0"
+    },
+    "target": "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+    "target_files": [
+      "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+      "/home/outsmartchad/.magnitude/models/hub/models--ISTA-DASLab--Qwen3.8-Flash-Next-GSQ-RCO-GGUF/snapshots/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0/Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00002-of-00002.gguf"
+    ],
+    "target_sha256": "69820c02ec7d0b45ef2ebb19d6620299db749fe2aded7f39f93c6b88b199b720"
+  },
+  "templates": [
+    {
+      "template": "repeat:64k",
+      "context": 65536,
+      "path": "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench/templates/f67f31e10d8a2109.json",
+      "digest": "f67f31e10d8a2109e35f1546812b6b379c50cc4bae65797323f28da38a2417fb"
+    }
+  ],
+  "rendered_digest": "bb912cafb448c5acab9b317812a57804ca6d9ee363ec79dfe8b925cd884cb06d",
+  "host": {
+    "hostname": "spark-6154",
+    "os": "linux",
+    "os_version": "7.0.0-1025-nvidia",
+    "chip": null,
+    "cpu_cores": 20,
+    "memory_bytes": 130661072896,
+    "gpus": null
+  },
+  "command": [
+    "/home/outsmartchad/.cache/magnitude-evaluation/outputs/d5bb3a407c23d17f-0bd87f38c1ce149e/target/release/magnitude-render",
+    "render",
+    "--artifacts",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/artifacts.json",
+    "--template",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench/templates/f67f31e10d8a2109.json",
+    "--output",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench/rendered",
+    "--build-identity",
+    "/home/outsmartchad/.cache/magnitude-evaluation/runs/20261125T082049Z-bench-1eaa61/bench/build.json"
+  ],
+  "measurements": {},
+  "traces": {}
+}
