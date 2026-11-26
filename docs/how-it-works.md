@@ -1,45 +1,56 @@
-# How Qwen 3.8 Flash Next runs through Magnitude
+# How Qwen3.8 Flash Next runs on one DGX Spark
 
-This guide follows the actual model artifact and serving path in this recipe. It separates the model’s learned computation from the inference engine’s memory-management strategy.
+This recipe combines Qwen's model architecture, ISTA-DASLab's quantized weights, and Magnitude's CUDA execution. The architecture defines the math. The checkpoint stores approximations of the learned numbers. The engine schedules that math and chooses where those numbers and the conversation state live on the Spark.
 
-## 1. The model: a sparse mixture of experts
+## 1. From a message to one new token
 
-Magnitude’s catalog describes Qwen 3.8 Flash Next as **180B total parameters, about 6B active per token, 512 routed experts, and 10 experts selected per token**. “180B” is the total learned parameter inventory; it does not mean every token runs a dense 180B matrix. At a routed feed-forward block, a gate scores available experts and selects a small top-k set. Those selected expert networks process the token, and their outputs are combined. Shared attention and other shared layers still run for every token.
+1. The chat template converts messages and roles into model input. The tokenizer breaks that input into token IDs. An embedding table turns each ID into a vector.
+2. **Prefill** processes the input tokens in chunks. Each decoder block mixes information from prior tokens and transforms each token's vector. The engine retains the history or recurrent state each block needs.
+3. At the end of prefill, the output projection gives a score for each possible next token. The sampler selects a token from those scores. Greedy decoding selects the highest scoring token.
+4. **Decode** uses that output to generate the next token and updates the state. Reusing state makes the next step much cheaper than running the whole conversation again. With MTP, one verification round can emit several tokens.
 
-The 6B-active figure is a useful model-size shorthand, not an exact count of every operation or a promise that only 6B weights need storage. The checkpoint is 66.4 GB on disk. Because expert selection changes from token to token, many of those weights are needed over a request even though only a subset participates in each token.
+TTFT measures the wait before any generated token arrives. Decode tok/s describes how quickly generation proceeds after the prompt has been processed. Faster decode does little to shorten a long wait if the prompt itself dominates TTFT.
 
-Qwen’s model card and the associated technical reports are the source of architectural and training claims; Magnitude’s catalog provides the exact MoE counts used by its recipe. See the [Magnitude model listing](https://magnitude.dev/benchmarks), the [checkpoint files](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF/tree/main/Q2_0), and the quantization papers linked from the model repository.
+## 2. What 180B total and 6B active mean
 
-## 2. Quantization: fitting the weight store
+| Part | What it does |
+| --- | --- |
+| 125B language trunk, about 6B active | Applies 48 decoder blocks and selects experts for each token. |
+| 51B n-gram embedding weights | Looks up learned features for short token sequences. A few rows are read per lookup. |
+| 4B MTP weights in the original model | Predicts additional likely tokens so the target can verify a group together. |
 
-This recipe uses ISTA-DASLab’s **GSQ-RCO Q2_0** GGUF checkpoint. Quantization stores model values with fewer bits than their original floating-point representation, reducing file size and data movement at the cost of approximation error. “2-bit” describes the quantization family, not a literal two bits for every file byte: scales, metadata, embeddings, and other tensors add storage.
+The roughly 180B label includes the trunk, n-gram embeddings and the original MTP component. It counts weights that can be useful across requests. At a routed feed-forward block, a learned router ranks **512 routed experts**, selects **10**, and combines their outputs with one shared expert. An expert is a small neural network for a token's vector. Routing changes with the token and the layer. The shared mixer, normalization, router and output projection still do work each step. [Qwen model card](https://huggingface.co/Qwen/Qwen3.8-Flash-Next)
 
-GSQ and RCO are separate methods described by their authors. GSQ groups weights and uses structured quantization decisions; RCO adds a calibration/optimization procedure intended to reduce output error. The exact published checkpoint is the source of truth for what was loaded here. This recipe does not claim equivalence to the original full-precision checkpoint.
+The n-gram component adds learned lookups for a token and nearby tokens. A hash maps bigrams and trigrams into a large table. The retrieved rows are gated into the residual streams near the beginning of the network. This scales stored knowledge differently from adding more dense matrix multiplications.
 
-The model’s auxiliary shared MTP head is distributed as **Q8_0**. That head proposes future tokens for speculative decoding; it is not the main 180B parameter model and it does not change the target model’s architecture into a different model.
+## 3. The 48 decoder blocks
 
-## 3. Token generation and speculative decoding
+There are 12 groups of four blocks. Each group has three **Gated DeltaNet** blocks and one **Qwen Sparse Attention (QSA)** block. Every block follows its mixer with a mixture-of-experts feed-forward network.
 
-For each generation step, the target model computes the next-token distribution. Magnitude’s MTP drafter proposes a short sequence; the target verifies the proposals in a batch. Accepted proposals allow more than one output token to be emitted per verification round, while rejected proposals fall back to ordinary target decoding. The measured run accepted 425 of 502 proposed tokens (84.7%). Acceptance varies with prompt and sampling settings; it is not a fixed speed multiplier.
+- **Gated DeltaNet** compresses prior information into a recurrent state per layer. A learned gate decays old information, and a delta update writes what the current token adds. Decode can update that summary without reading every earlier token's key and value. Chunked kernels process blocks of prompt tokens during prefill.
+- **QSA** keeps a history that a new token can query directly. A smaller indexer scores blocks of prior tokens and selects a subset for the expensive attention calculation. Qwen's config uses a 512-block budget, equivalent to 2,048 tokens. The engine still stores history so later queries can choose different blocks.
+- **Gated residual streams** carry four parallel paths between sublayers. Learned gates choose what each mixer or feed-forward block reads and writes. A residual path allows information to survive while the block computes an update.
 
-The benchmark used greedy decoding, which selects the highest-probability token. Thinking was off. Therefore this is a controlled engine-throughput measurement, not a measurement of reasoning quality or a normal interactive prose response.
+The KV cache belongs to the attention layers. The recurrent layers keep a different form of session state. The engine also reserves memory for temporary buffers and room in the context for generated tokens, which is why a model's advertised maximum context and our engine setting are different values. The official checkpoint has a vision encoder. This recipe launches with `--no-projector` to match the text benchmark. [Original configuration](https://huggingface.co/Qwen/Qwen3.8-Flash-Next/blob/main/config.json) · [Magnitude family implementation](https://github.com/magnitudedev/magnitude/blob/78c92e4f21e38f9528f21e09c5e43936a04b6b0d/inference/engine/families/qwen4exp/src/lib.rs)
 
-## 4. Magnitude’s GPU / RAM / SSD tiers
+## 4. What Q2_0 and Q8_0 change
 
-Magnitude’s approach is to keep shared layers and a useful working set of experts close to the GPU, place additional experts in system memory, and keep the remaining expert weights on SSD. The router identifies experts needed by each token. The runtime tries to predict upcoming expert use and prefetch weights through the storage hierarchy so the GPU has the data when it reaches that computation.
+The served target is ISTA-DASLab **GSQ-RCO Q2_0** in split GGUF files. GGUF is the container for tensor data, tensor types, architecture metadata and tokenizer information. The quant label primarily describes the cheap weight representation used by large parts of the model. Other tensors, block scales and file metadata contribute to the actual size.
 
-The Spark’s GB10 shares a unified memory pool with the CPU. “GPU memory,” “host RAM,” and “SSD” are still useful descriptions of placement and bandwidth, but the first two are not separate 128 GB pools that can simply be added together. Paging an expert from SSD or RAM costs time; cache hits and prefetch accuracy matter. A sparse model can therefore fit in a smaller device than a dense loading strategy would suggest, while its speed remains sensitive to expert locality and storage traffic.
+- **GSQ** fits quantized values and group scales to limit the error from low precision.
+- **RCO** optimizes assignments under a fixed compression budget. It helps decide where spending extra bits does the most good in a mixed-precision checkpoint.
+- **Q8_0** is the quantization of this recipe's separate shared MTP head. The head uses target features to draft likely subsequent tokens. The engine verifies proposals with the Q2_0 target. On this repeat workload 425 of 502 timed proposals were accepted. The number depends on prompt and sampling.
 
-The benchmark’s process-tree RSS peaked near 50 GiB. That is a sampled process memory metric, not a report of all system allocations and not a standalone GPU VRAM reading.
+Both our [TensorFold recipe](https://github.com/outsmartchad/qwen38-flash-next-single-dgx-spark-tensorfold) and this recipe serve the same Qwen model family, about 6B active language parameters per token. TensorFold uses NVIDIA's NVFP4 weights, another inference engine and a different chat benchmark. A throughput comparison between them gives no basis for a quality score. [Target checkpoint](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF/tree/ed59f92082b1e93c0e96d60a8b11aab089b52f09/Q2_0) · [GSQ paper](https://arxiv.org/abs/2604.18556) · [RCO paper](https://arxiv.org/abs/2605.00649)
 
-## 5. What the benchmark does and does not prove
+## 5. How Magnitude places the model on GB10
 
-The `repeat:64k` test feeds a fixed repeated passage and asks the model to continue with a short greedy completion. It tests long-prompt ingestion and decode in a repeatable way. It does not score answer correctness, code quality, tool use, multilingual ability, or conversation quality. The 72.9 tok/s result should therefore be read as one measured serving configuration under the exact conditions in [results](results.md).
+The Spark's CPU and GPU share a 128 GB physical memory pool. GPU kernels still need the tensors in a usable layout and memory placement. Magnitude can keep the shared blocks resident, allocate an expert bank for commonly needed weights, and stage missing experts from the host or the SSD. The layer router's top-k decision tells the engine which expert weights the token needs. Magnitude can overlap some reads and staging work with compute.
 
-## Sources
+GPU work, prompt state, n-gram tables and the expert bank all need space. The engine budget can change how much fits while the model runs. In this Qwen run, the sampled expert bank stayed at **512 slots** and reported **zero disk-resident expert bytes** in the recorded allocation snapshots. The measurements demonstrate local inference with this placement policy. They do not isolate a benefit from SSD paging. [Allocation samples](../raw/bench/allocations.jsonl) · [Raw report](../raw/bench/report.md)
 
-- [Magnitude benchmark and catalog](https://magnitude.dev/benchmarks)
-- [Magnitude source repository](https://github.com/magnitudedev/magnitude)
-- [ISTA-DASLab Q2_0 checkpoint files](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF/tree/main/Q2_0)
-- [GSQ paper](https://arxiv.org/abs/2604.18556)
-- [RCO paper](https://arxiv.org/abs/2605.00649)
+## 6. How this recipe starts and measures it
+
+`prepare` acquires the pinned target and drafter through the same catalog that the benchmark uses. It builds the pinned native engine and stages NVRTC, the NVIDIA runtime compiler Magnitude uses to form CUDA kernels. `serve` sends the GGUF shards and the draft file to that binary, limits the served context to 64,768 tokens and binds to loopback. `smoke` checks readiness and reads a generated reply through the local OpenAI-compatible API.
+
+The benchmark uses its own native server on a temporary loopback port. It evaluates a cold 64K repeat prompt with thinking off and reports 256 generated tokens. We published both valid passes, memory samples and the tuning trace. The large number of default kernel fallbacks is an observation about this run. [Setup](setup.md) · [Benchmark method and results](results.md) · [Troubleshooting](troubleshooting.md)

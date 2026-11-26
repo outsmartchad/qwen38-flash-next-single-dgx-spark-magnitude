@@ -1,37 +1,27 @@
 # Troubleshooting
 
-## The model is not in the model list
+## Preflight reports missing tools
 
-Start `magnitude serve` first, then run the exact catalog ID:
+Follow [setup](setup.md#1-check-the-spark) to install the build tools, rustup, and uv. Reopen the shell after installing Rust or uv, or add their user bin directories to `PATH`. Run `./scripts/recipe.py doctor` on the Spark. If `nvidia-smi` fails, fix the Spark's NVIDIA driver before building or loading.
 
-```bash
-magnitude models pull qwen3.8-flash-next:gguf:q2
-magnitude models list
-```
+## NVRTC cannot load
 
-If the current catalog no longer recognizes the ID, check Magnitude’s [benchmark page](https://magnitude.dev/benchmarks) and model catalog, then record the changed ID and checkpoint revision before benchmarking.
+The pinned native CUDA engine opens `libnvrtc.so.12` and `libnvrtc-builtins.so.12.9` from the same directory. Run `prepare` to fetch and verify the ARM64 SBSA build, or set `SEISMIC_NVRTC_DIRECTORY` to a directory holding both files. A CUDA 13 driver and toolkit can coexist with this recipe's CUDA 12.9 runtime compiler. Renaming a CUDA 13 library does not supply the CUDA 12 ABI. [Magnitude CUDA compatibility](https://github.com/magnitudedev/magnitude/blob/78c92e4f21e38f9528f21e09c5e43936a04b6b0d/inference/docs/compatibility.md)
 
-## CUDA or NVRTC initialization fails
+## Model acquisition fails
 
-Confirm the Spark driver and CUDA runtime are healthy (`nvidia-smi`). The benchmark engine needs the NVRTC libraries supplied by the Magnitude runtime. If building the pinned upstream source manually, make the runtime library directory discoverable to the build/run process; see `scripts/benchmark.sh`.
+Check disk space on both the model store (`~/.magnitude/models`) and build cache. The catalog package contains 2 target GGUF shards plus the recorded auxiliary artifacts. Keep them together and rerun `prepare`. Its artifact check expects the pinned snapshot and the measured target and MTP identities. When comparing a replacement quant, collect a new baseline.
 
-## High memory pressure
+## The API is unavailable
 
-Qwen’s quantized checkpoint is still about 66.4 GB on disk, and runtime memory includes expert caches, activations, context/KV state, and the operating system. Close other model servers before measuring. Do not treat the model file size as a full memory estimate.
+Wait for the foreground server to announce its listener. Then run `./scripts/recipe.py status` and `./scripts/recipe.py smoke`. The wrapper uses the native engine at `/v1`. The separate Magnitude app and `magnitude serve` use `/inference/v1`. If port 10100 is already taken, choose a different `--port` and use it for each command. Run the commands on the Spark or forward its loopback port through SSH.
 
-## Local API does not respond
+## The model cannot load or the client reports a device or transport error
 
-```bash
-ss -ltnp 'sport = :10100'
-curl --fail-with-body http://127.0.0.1:10100/inference/v1/models
-```
+Stop other model servers and retry the measured context profile. Check the foreground engine logs and `free -h`. The model file, process RSS, context state, temporary compute workspace and OS allocations describe different parts of the memory budget.
 
-Start `magnitude serve` if the local port is absent. Keep API calls on `127.0.0.1`; do not use `magnitude server setup` for a loopback-only run.
+The pinned Q2_0 benchmark used one 64K request. Longer prompts or additional active requests can change cache demand and draft acceptance. The separate Q4 run used a different Magnitude release.
 
-## Benchmark is much slower than the published 83 tok/s
+## The numbers differ from the published benchmark
 
-First verify the checkpoint, engine revision, prompt size, empty prompt cache, output budget, drafting mode, and thermal state. This recipe measured 72.9 tok/s median over two valid 256-token generations. The harness reported 97.7% canonical tuning fallback. Compare raw run artifacts before attributing a difference to the model or hardware.
-
-## An individual run fails
-
-Read the run’s `events.jsonl`, `logs/`, and `summary.json`. Invalid requests are retained by the harness but excluded from timing. Preserve the run directory when filing an issue; do not report only the fastest pass.
+Match the model snapshot, engine revision, prompt, 256-token output cap, disabled prefix cache and draft method. Compare individual timed rows, never warmups. A fresh kernel-tuning run can fall back to default kernels. Check the eligible-pass count and error outcomes before using the rates. [Benchmark method and traces](results.md)
