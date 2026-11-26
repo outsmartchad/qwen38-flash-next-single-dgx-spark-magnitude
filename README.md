@@ -2,7 +2,9 @@
 
 Serve **180B total / 6B active** Qwen3.8 Flash Next on one 128 GB DGX Spark. The recipe uses Magnitude CUDA, ISTA-DASLab Q2_0 GGUF and the shared Q8_0 MTP head. The text API binds to `127.0.0.1`.
 
-![One DGX Spark running Qwen3.8 Flash Next through Magnitude. 81.99 tok/s single-user decode, 739.0 tok/s 64K cold prefill, 87.18 s TTFT.](assets/qwen38-flash-next-magnitude.png)
+![One DGX Spark running Qwen3.8 Flash Next through Magnitude. 81.99 tok/s single-user decode, 739.0 tok/s 64K cold prefill, 87.18 s TTFT.](assets/qwen38-magnitude-tower-of-babel.png)
+
+Artwork by Pieter Bruegel the Elder, *The Tower of Babel* (1563). [Source](<https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_(Vienna)_-_Google_Art_Project.jpg>)
 
 [Setup and first chat](docs/setup.md) · [How it works](docs/how-it-works.md) · [Benchmark method and raw data](docs/results.md) · [Troubleshooting](docs/troubleshooting.md)
 
